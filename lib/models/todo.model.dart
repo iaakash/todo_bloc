@@ -6,7 +6,7 @@ class Todo extends Equatable {
   final String desc;
   final bool completed;
 
-  Todo({String? id, required this.desc, required this.completed})
+  Todo({String? id, required this.desc, this.completed = false})
     : id = id ?? Uuid().v4();
 
   @override

@@ -6,3 +6,9 @@ sealed class TodolistEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+final class AddTodoEvent extends TodolistEvent {
+  final String description;
+
+  const AddTodoEvent({required this.description});
+}

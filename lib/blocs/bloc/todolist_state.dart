@@ -16,4 +16,8 @@ class TodolistState extends Equatable {
 
   @override
   List<Object> get props => [];
+
+  TodolistState copyWith({List<Todo>? todolist}) {
+    return TodolistState(todolist ?? this.todolist);
+  }
 }
