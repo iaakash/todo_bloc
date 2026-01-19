@@ -1,7 +1,8 @@
+import 'package:bloc_todo/blocs/todos_filtered/bloc/todos_filtered_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:bloc_todo/blocs/bloc/todolist_bloc.dart';
+import 'package:bloc_todo/blocs/todo_list/todolist_bloc.dart';
 import 'package:bloc_todo/models/todo.model.dart';
 import 'package:bloc_todo/widgets/todo_item.dart';
 
@@ -49,7 +50,10 @@ class ShowTodos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // To read state value
-    final List<Todo> todoList = context.watch<TodolistBloc>().state.todolist;
+    final List<Todo> todoList = context
+        .watch<TodosFilteredBloc>()
+        .state
+        .filteredTodos;
 
     return Expanded(
       child: ListView.builder(

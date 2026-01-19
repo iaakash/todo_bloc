@@ -1,4 +1,4 @@
-import 'package:bloc_todo/blocs/bloc/todolist_bloc.dart';
+import 'package:bloc_todo/blocs/todo_list/todolist_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,6 +18,7 @@ class CreateTodo extends StatelessWidget {
             context.read<TodolistBloc>().add(
               AddTodoEvent(description: todoDesc),
             );
+            addToDoController.text = '';
           }
         },
       ),
