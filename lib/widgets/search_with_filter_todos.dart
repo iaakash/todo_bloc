@@ -1,4 +1,4 @@
-import 'package:bloc_todo/blocs/todo_filter/bloc/todo_filter_bloc.dart';
+import 'package:bloc_todo/blocs/todo_filter/todo_filter_bloc.dart';
 import 'package:bloc_todo/models/todo_filters.enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
