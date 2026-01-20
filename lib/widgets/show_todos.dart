@@ -1,4 +1,6 @@
+import 'package:bloc_todo/blocs/todo_filter/bloc/todo_filter_bloc.dart';
 import 'package:bloc_todo/blocs/todos_filtered/bloc/todos_filtered_bloc.dart';
+import 'package:bloc_todo/models/todo_filters.enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,6 +49,21 @@ class ShowTodos extends StatelessWidget {
     );
   }
 
+  List<Todo> setFilteredTodos(List<Todo> todos, Filter activeFilter) {
+    List<Todo> _filteredTodos;
+
+    switch (activeFilter) {
+      case Filter.active:
+        _filteredTodos = todos.where((Todo todo) => !todo.completed).toList();
+      case Filter.completed:
+        _filteredTodos = todos.where((Todo todo) => todo.completed).toList();
+      case Filter.all:
+      default:
+        _filteredTodos = todos;
+    }
+    return _filteredTodos;
+  }
+
   @override
   Widget build(BuildContext context) {
     // To read state value
@@ -55,19 +72,51 @@ class ShowTodos extends StatelessWidget {
         .state
         .filteredTodos;
 
-    return Expanded(
-      child: ListView.builder(
-        itemCount: todoList.length,
-        itemBuilder: (BuildContext context, index) {
-          final todo = todoList[index];
+    // final List<Todo> todoList = context.watch<TodolistBloc>().state.todolist;
 
-          return DismissableListItem(
-            todos: todoList,
-            idx: index,
-            onToDoCheck: onToDoCheck,
-            openEditModal: openEditModal,
-          );
-        },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<TodolistBloc, TodolistState>(
+          listener: (context, state) {
+            print(state.todolist);
+            print(context.read<TodoFilterBloc>().state.activeFilter);
+            final List<Todo> filteredTodos = setFilteredTodos(
+              state.todolist,
+              context.read<TodoFilterBloc>().state.activeFilter,
+            );
+            context.read<TodosFilteredBloc>().add(
+              SetFilteredTodosEvent(todoList: filteredTodos),
+            );
+          },
+        ),
+        BlocListener<TodoFilterBloc, TodoFilterState>(
+          listener: (context, state) {
+            print(state.activeFilter);
+            print(context.read<TodolistBloc>().state.todolist);
+            final List<Todo> filteredTodos = setFilteredTodos(
+              context.read<TodolistBloc>().state.todolist,
+              state.activeFilter,
+            );
+            context.read<TodosFilteredBloc>().add(
+              SetFilteredTodosEvent(todoList: filteredTodos),
+            );
+          },
+        ),
+      ],
+      child: Expanded(
+        child: ListView.builder(
+          itemCount: todoList.length,
+          itemBuilder: (BuildContext context, index) {
+            final todo = todoList[index];
+
+            return DismissableListItem(
+              todos: todoList,
+              idx: index,
+              onToDoCheck: onToDoCheck,
+              openEditModal: openEditModal,
+            );
+          },
+        ),
       ),
     );
   }

@@ -11,6 +11,7 @@ class TodolistState extends Equatable {
       Todo(id: '2', desc: 'Two', completed: false),
       Todo(id: '3', desc: 'Three', completed: true),
       Todo(id: '4', desc: 'Four', completed: false),
+      Todo(id: '5', desc: 'Five', completed: true),
     ]);
   }
 

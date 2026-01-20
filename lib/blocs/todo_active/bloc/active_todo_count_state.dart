@@ -5,10 +5,6 @@ class ActiveTodoCountState extends Equatable {
 
   final int activeTodoCount;
 
-  factory ActiveTodoCountState.initial() {
-    return ActiveTodoCountState(0);
-  }
-
   @override
   List<Object> get props => [activeTodoCount];
 

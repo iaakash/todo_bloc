@@ -13,59 +13,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ManageTodos extends StatelessWidget {
   const ManageTodos({super.key});
 
-  List<Todo> setFilteredTodos(List<Todo> todos, Filter activeFilter) {
-    List<Todo> _filteredTodos;
-
-    switch (activeFilter) {
-      case Filter.active:
-        _filteredTodos = todos.where((Todo todo) => !todo.completed).toList();
-      case Filter.completed:
-        _filteredTodos = todos.where((Todo todo) => todo.completed).toList();
-      case Filter.all:
-      default:
-        _filteredTodos = todos;
-    }
-    return _filteredTodos;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Todos')),
-      body: MultiBlocListener(
-        listeners: [
-          BlocListener<TodolistBloc, TodolistState>(
-            listener: (context, state) {
-              final List<Todo> filteredTodos = setFilteredTodos(
-                state.todolist,
-                context.read<TodoFilterBloc>().state.activeFilter,
-              );
-              context.read<TodosFilteredBloc>().add(
-                SetFilteredTodosEvent(todoList: filteredTodos),
-              );
-            },
-          ),
-          BlocListener<TodoFilterBloc, TodoFilterState>(
-            listener: (context, state) {
-              final List<Todo> filteredTodos = setFilteredTodos(
-                context.read<TodolistBloc>().state.todolist,
-                state.activeFilter,
-              );
-              context.read<TodosFilteredBloc>().add(
-                SetFilteredTodosEvent(todoList: filteredTodos),
-              );
-            },
-          ),
+      body: Column(
+        children: [
+          TodoHeader(),
+          CreateTodo(),
+          SearchAndFilterTodos(),
+          SizedBox(height: 20),
+          ShowTodos(),
         ],
-        child: Column(
-          children: [
-            TodoHeader(),
-            CreateTodo(),
-            SearchAndFilterTodos(),
-            SizedBox(height: 20),
-            ShowTodos(),
-          ],
-        ),
       ),
     );
   }

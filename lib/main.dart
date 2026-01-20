@@ -2,6 +2,7 @@ import 'package:bloc_todo/blocs/todo_active/bloc/active_todo_count_bloc.dart';
 import 'package:bloc_todo/blocs/todo_filter/bloc/todo_filter_bloc.dart';
 import 'package:bloc_todo/blocs/todo_list/todolist_bloc.dart';
 import 'package:bloc_todo/blocs/todos_filtered/bloc/todos_filtered_bloc.dart';
+import 'package:bloc_todo/models/todo.model.dart';
 import 'package:bloc_todo/pages/manage_todos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,9 +20,23 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => TodolistBloc()),
-        BlocProvider(create: (context) => ActiveTodoCountBloc()),
+        BlocProvider(
+          create: (context) => ActiveTodoCountBloc(
+            initialCount: context
+                .read<TodolistBloc>()
+                .state
+                .todolist
+                .where((Todo todo) => !todo.completed)
+                .toList()
+                .length,
+          ),
+        ),
         BlocProvider(create: (context) => TodoFilterBloc()),
-        BlocProvider(create: (context) => TodosFilteredBloc()),
+        BlocProvider(
+          create: (context) => TodosFilteredBloc(
+            initialTodos: context.read<TodolistBloc>().state.todolist,
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'Todo',

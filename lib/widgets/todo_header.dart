@@ -18,9 +18,10 @@ class TodoHeader extends StatelessWidget {
           BlocListener<TodolistBloc, TodolistState>(
             listener: (context, state) {
               final int activeTodoCount = state.todolist
-                  .where((Todo todo) => todo.completed)
+                  .where((Todo todo) => !todo.completed)
                   .toList()
                   .length;
+
               context.read<ActiveTodoCountBloc>().add(
                 CalculateActiveTodoCountEvent(activeTodoCount: activeTodoCount),
               );
